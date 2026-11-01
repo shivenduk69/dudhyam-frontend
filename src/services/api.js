@@ -1,7 +1,17 @@
 import axios from 'axios';
 
+// Normalize base URL: ensure /api is present if a domain is specified without it
+let rawBaseUrl = import.meta.env.VITE_API_URL || '/api';
+let normalizedBaseUrl = rawBaseUrl.trim();
+if (normalizedBaseUrl.startsWith('http')) {
+  normalizedBaseUrl = normalizedBaseUrl.replace(/\/$/, '');
+  if (!normalizedBaseUrl.endsWith('/api')) {
+    normalizedBaseUrl = `${normalizedBaseUrl}/api`;
+  }
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: normalizedBaseUrl,
   headers: {
     'Content-Type': 'application/json',
   },
